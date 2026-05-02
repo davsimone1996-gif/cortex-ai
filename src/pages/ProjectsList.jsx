@@ -89,7 +89,7 @@ export default function ProjectsList() {
 
       let query = supabase
         .from('projects')
-        .select('*', { count: 'exact' })
+        .select('id, slug, thumbnail_url, title, category, year, client', { count: 'exact' })
         .order('created_at', { ascending: false })
         .range(from, to)
 

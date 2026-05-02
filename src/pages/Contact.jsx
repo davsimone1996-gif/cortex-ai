@@ -36,19 +36,6 @@ export default function Contact() {
     }
 
     setLoading(true)
-    const { data: existing } = await supabase
-      .from('contacts')
-      .select('id')
-      .eq('email', form.email.trim().toLowerCase())
-      .limit(1)
-      .maybeSingle()
-
-    if (existing) {
-      setError('Questa email ha già inviato una richiesta. Ti contatteremo presto.')
-      setLoading(false)
-      return
-    }
-
     const { error: dbError } = await supabase.from('contacts').insert([{
       name: form.name.trim().slice(0, FIELDS_MAX.name),
       email: form.email.trim().toLowerCase().slice(0, FIELDS_MAX.email),
@@ -59,7 +46,11 @@ export default function Contact() {
     setLoading(false)
 
     if (dbError) {
-      setError("Errore nell'invio. Riprova o scrivici direttamente via email.")
+      if (dbError.code === '23505') {
+        setError('Questa email ha già inviato una richiesta. Ti contatteremo presto.')
+      } else {
+        setError("Errore nell'invio. Riprova o scrivici direttamente via email.")
+      }
     } else {
       lastSubmit.current = Date.now()
       setSent(true)

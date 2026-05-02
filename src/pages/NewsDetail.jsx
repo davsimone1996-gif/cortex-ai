@@ -15,7 +15,7 @@ export default function NewsDetail() {
 
   useEffect(() => {
     async function fetch() {
-      const { data } = await supabase.from('articles').select('*').eq('slug', slug).single()
+      const { data } = await supabase.from('articles').select('slug, category, date, title, excerpt, image_url, content').eq('slug', slug).single()
       setArticle(data)
       setLoading(false)
     }

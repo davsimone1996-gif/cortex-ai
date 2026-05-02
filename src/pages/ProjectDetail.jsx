@@ -13,7 +13,7 @@ export default function ProjectDetail() {
     async function fetchProject() {
       const { data } = await supabase
         .from('projects')
-        .select('*')
+        .select('slug, thumbnail_url, title, category, year, client, description, video_url')
         .eq('slug', slug)
         .single()
       setProject(data)

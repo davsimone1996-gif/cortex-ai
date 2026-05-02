@@ -22,8 +22,8 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       const [{ data: proj }, { data: arts }, { data: settings }] = await Promise.all([
-        supabase.from('projects').select('*').order('created_at', { ascending: false }).limit(6),
-        supabase.from('articles').select('*').order('date', { ascending: false }).limit(3),
+        supabase.from('projects').select('id, slug, thumbnail_url, title, category, year, client').order('created_at', { ascending: false }).limit(6),
+        supabase.from('articles').select('id, slug, image_url, title, category, date, excerpt').order('date', { ascending: false }).limit(3),
         supabase.from('settings').select('value').eq('key', 'reel_url').single(),
       ])
       if (proj) setProjects(proj)

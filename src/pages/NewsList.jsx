@@ -92,7 +92,7 @@ export default function NewsList() {
 
       let query = supabase
         .from('articles')
-        .select('*', { count: 'exact' })
+        .select('id, slug, image_url, title, category, date, excerpt', { count: 'exact' })
         .order('date', { ascending: false })
         .range(from, to)
 
