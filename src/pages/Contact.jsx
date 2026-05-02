@@ -36,9 +36,22 @@ export default function Contact() {
     }
 
     setLoading(true)
+    const { data: existing } = await supabase
+      .from('contacts')
+      .select('id')
+      .eq('email', form.email.trim().toLowerCase())
+      .limit(1)
+      .maybeSingle()
+
+    if (existing) {
+      setError('Questa email ha già inviato una richiesta. Ti contatteremo presto.')
+      setLoading(false)
+      return
+    }
+
     const { error: dbError } = await supabase.from('contacts').insert([{
       name: form.name.trim().slice(0, FIELDS_MAX.name),
-      email: form.email.trim().slice(0, FIELDS_MAX.email),
+      email: form.email.trim().toLowerCase().slice(0, FIELDS_MAX.email),
       company: form.company.trim().slice(0, FIELDS_MAX.company),
       budget: form.budget,
       message: form.message.trim().slice(0, FIELDS_MAX.message),
